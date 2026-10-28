@@ -2,7 +2,7 @@ name: Daily Git Lesson PR
 
 on:
   schedule:
-    - cron: '0 * * * *'  # every hour
+    - cron: '0 5 * * *'  # 10 AM PKT (UTC+5)
   workflow_dispatch:  # Allow manual trigger
 
 permissions:
