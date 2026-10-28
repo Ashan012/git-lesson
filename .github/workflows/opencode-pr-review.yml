@@ -1,0 +1,64 @@
+name: Opencode PR Review (Gemini)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install opencode
+        run: npm install -g opencode-ai@latest
+
+      - name: Get PR diff
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          git diff origin/${{ github.base_ref }}...HEAD > pr.diff
+          echo "=== DIFF SIZE ==="
+          wc -l pr.diff
+
+      - name: Review with Opencode + Gemini
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GOOGLE_GENERATIVE_AI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Starting review..."
+          PROMPT="You are an expert Git code reviewer. Review the following git diff and give a clear, actionable review. Focus on bugs, logic errors, security issues, readability, and simple improvements. Use markdown. Keep it short and practical. Also mention if the PR is safe to merge or not.\n\nHere is the diff:\n\n"
+          {
+            echo "$PROMPT"
+            cat pr.diff
+          } | opencode run --model google/gemini-2.5-flash "Review this PR diff" > review_raw.txt 2>&1 || true
+          
+          echo "=== RAW OUTPUT ==="
+          tail -40 review_raw.txt
+          
+          if [ ! -s review_raw.txt ]; then
+            echo "## Opencode Review (Gemini)" > review.md
+            echo "_Review failed to generate. Check workflow logs._" >> review.md
+          else
+            echo "## Opencode Review (Gemini)" > review.md
+            echo "" >> review.md
+            cat review_raw.txt >> review.md
+          fi
+
+      - name: Post review comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --body-file review.md
