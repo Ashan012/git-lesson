@@ -1,0 +1,28 @@
+name: PR Check - Only MD files
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-files:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check only .md files changed
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }} HEAD)
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+          for f in $CHANGED_FILES; do
+            if [[ ! "$f" =~ \.md$ ]]; then
+              echo "ERROR: Non-.md file detected: $f"
+              exit 1
+            fi
+          done
+          echo "All changed files are .md - OK"
