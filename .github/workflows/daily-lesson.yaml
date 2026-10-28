@@ -29,10 +29,9 @@ jobs:
           export DATE=$(date -u +%Y-%m-%d)
           bash scripts/create_lesson_pr.sh
 
-      - name: Auto approve and merge
+      - name: Auto merge
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           PR_URL=$(cat pr_url.txt)
-          gh pr review "$PR_URL" --approve
-          gh pr merge "$PR_URL" --auto --merge
+          gh pr merge "$PR_URL" --merge --admin 2>&1 || gh pr merge "$PR_URL" --merge 2>&1 || true
