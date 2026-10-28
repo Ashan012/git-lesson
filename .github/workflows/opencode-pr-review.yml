@@ -43,7 +43,7 @@ jobs:
           {
             echo "$PROMPT"
             cat pr.diff
-          } | opencode run --model google/gemini-2.5-flash "Review this PR diff" > review_raw.txt 2>&1 || true
+          } | opencode run --model google/gemini-3.5-flash "Review this PR diff" > review_raw.txt 2>&1 || true
           
           echo "=== RAW OUTPUT ==="
           tail -40 review_raw.txt
