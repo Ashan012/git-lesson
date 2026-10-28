@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Git Basics - init",
+    "content": "# Git Basics: `git init`\n\n`git init` creates a new Git repository in the current directory.\n\n## Usage\n```bash\ngit init\n```\n\n## Notes\n- Creates a `.git/` folder to track history\n- Only needs to be run once per project\n"
+  },
+  {
+    "title": "Git Basics - clone",
+    "content": "# Git Basics: `git clone`\n\n`git clone` copies a remote repository to your local machine.\n\n## Usage\n```bash\ngit clone https://github.com/user/repo.git\n```\n\n## Notes\n- Downloads all files and commit history\n- Sets up remote called `origin`\n"
+  },
+  {
+    "title": "Git Basics - add",
+    "content": "# Git Basics: `git add`\n\n`git add` stages changes for the next commit.\n\n## Usage\n```bash\ngit add file.txt\n# or stage all changes\ngit add .\n```\n"
+  },
+  {
+    "title": "Git Basics - commit",
+    "content": "# Git Basics: `git commit`\n\n`git commit` saves staged changes to the repository history.\n\n## Usage\n```bash\ngit commit -m \"Your commit message\"\n```\n\n## Tip\nWrite clear, descriptive commit messages.\n"
+  },
+  {
+    "title": "Git Basics - status",
+    "content": "# Git Basics: `git status`\n\n`git status` shows the current state of the working directory and staging area.\n\n## Usage\n```bash\ngit status\n```\n"
+  },
+  {
+    "title": "Git Basics - log",
+    "content": "# Git Basics: `git log`\n\n`git log` shows the commit history.\n\n## Usage\n```bash\ngit log --oneline\n```\n"
+  },
+  {
+    "title": "Git Basics - branch",
+    "content": "# Git Basics: `git branch`\n\n`git branch` lists, creates, or deletes branches.\n\n## Usage\n```bash\ngit branch        # list branches\ngit branch feature # create branch\n```\n"
+  },
+  {
+    "title": "Git Basics - checkout/switch",
+    "content": "# Git Basics: Switching branches\n\nUse `git switch` (modern) or `git checkout` to change branches.\n\n## Usage\n```bash\ngit switch feature\n# or\ngit checkout feature\n```\n"
+  },
+  {
+    "title": "Git Basics - merge",
+    "content": "# Git Basics: `git merge`\n\n`git merge` combines changes from another branch into the current branch.\n\n## Usage\n```bash\ngit switch main\ngit merge feature\n```\n"
+  },
+  {
+    "title": "Git Basics - push/pull",
+    "content": "# Git Basics: push & pull\n\n- `git push` sends local commits to remote\n- `git pull` fetches and merges remote changes\n\n## Usage\n```bash\ngit push origin main\ngit pull origin main\n```\n"
+  }
+]
