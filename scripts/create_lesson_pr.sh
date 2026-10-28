@@ -29,9 +29,10 @@ git config user.email "github-actions[bot]@users.noreply.github.com"
 git checkout -b "$BRANCH"
 git add lessons/lesson-*.md
 git commit -m "Add daily lesson: $LESSON"
-git push -u origin "$BRANCH"
+git push -u origin "$BRANCH" || git push origin "$BRANCH"
 
-# Create PR
-PR_URL=$(gh pr create --title "Daily Lesson: $LESSON" --body "Auto-generated daily Git lesson for $DATE" --base main --head "$BRANCH")
+# Create PR (use default branch)
+DEFAULT_BRANCH=$(git remote show origin | grep 'HEAD branch' | awk '{print $NF}')
+PR_URL=$(gh pr create --title "Daily Lesson: $LESSON" --body "Auto-generated daily Git lesson for $DATE" --base "$DEFAULT_BRANCH" --head "$BRANCH")
 echo "PR created: $PR_URL"
 echo "$PR_URL" > pr_url.txt
